@@ -1,30 +1,32 @@
-const firebaseConfig = {
-  // راح نضيف بيانات Firebase هنا بعد شوي
-};
+// 1. ربط السيرفر بمشروعك (rex-chat)
+const supabaseUrl = 'https://ziuinockjozecynqrkxu.supabase.co';
+const supabaseKey = 'sb_publishable_RN3kAgfGkqJyI5AodbCGmw_GVDN4_GVDN4'; // المفتاح اللي كان في صورتك
+const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+// 2. وظيفة استقبال الرسائل فوراً (Real-time)
+_supabase
+  .channel('public:messages')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+    const div = document.getElementById('messagesDiv');
+    if(div) {
+        const msg = document.createElement('p');
+        msg.innerHTML = <b>${payload.new.sender_name}:</b> ${payload.new.content};
+        div.appendChild(msg);
+        div.scrollTop = div.scrollHeight; // ينزل تحت تلقائياً
+    }
+  })
+  .subscribe();
 
-const roomInput = document.getElementById("room");
-const msgInput = document.getElementById("msg");
-const messagesDiv = document.getElementById("messages");
-
-function send() {
-  const room = roomInput.value;
-  const msg = msgInput.value;
-
-  if (room === "" || msg === "") return;
-
-  database.ref("rooms/" + room).push(msg);
-  msgInput.value = "";
+// 3. وظيفة إرسال الرسالة لما تضغط الزر
+async function send() {
+    const input = document.getElementById('msgInput');
+    const text = input.value;
+    
+    if (text.trim() !== "") {
+        const { error } = await _supabase.from('messages').insert([
+            { content: text, sender_name: 'REX User' }
+        ]);
+        
+        if (!error) input.value = ""; // يمسح المربع بعد ما ترسل
+    }
 }
-
-roomInput.addEventListener("change", () => {
-  messagesDiv.innerHTML = "";
-  database.ref("rooms/" + roomInput.value)
-    .on("child_added", snapshot => {
-      const div = document.createElement("div");
-      div.textContent = snapshot.val();
-      messagesDiv.appendChild(div);
-    });
-});
