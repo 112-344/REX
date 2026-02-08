@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>One Piece Chat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="chat-container">
+  <img src="luffy.png" class="background-logo">
+  <input id="room" placeholder="رمز الغرفة">
+  <div id="messages"></div>
+  <input id="msg" placeholder="اكتب رسالتك">
+  <button onclick="send()">إرسال</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
