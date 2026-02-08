@@ -1,0 +1,30 @@
+body {
+  background: #0b0b0b;
+  font-family: Arial;
+  color: white;
+  text-align: center;
+}
+
+.chat-container {
+  width: 90%;
+  max-width: 400px;
+  margin: auto;
+  position: relative;
+}
+
+.background-logo {
+  position: absolute;
+  width: 200px;
+  opacity: 0.15;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#messages {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #333;
+  margin: 10px 0;
+  padding: 10px;
+}
